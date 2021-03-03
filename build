@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+exec stack ghc -- \
+  --make xmonad.hs \
+  -i \
+  -ilib \
+  -fforce-recomp \
+  -main-is main \
+  -fwarn-tabs \
+  -threaded \
+  -O2 \
+  -Wall \
+  -with-rtsopts=-N4 \
+  -v0 \
+  -o "$1"

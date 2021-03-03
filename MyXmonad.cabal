@@ -1,0 +1,25 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 42bd1fe1f96e9c34cd3cabea03c0acb83a8e10cbecddf2def3ca8e49ed7920de
+
+name:           MyXmonad
+version:        0.1.0
+synopsis:       xmonad setting
+build-type:     Simple
+
+executable xmonad
+  main-is: xmonad.hs
+  other-modules:
+      Paths_MyXmonad
+  ghc-options: -Wall -fwarn-tabs -threaded -O2 -with-rtsopts=-N4
+  build-depends:
+      X11
+    , base
+    , containers
+    , xmonad
+    , xmonad-contrib
+  default-language: Haskell2010
