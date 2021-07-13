@@ -103,11 +103,11 @@ myKeys =
   -- }}}
 
   -- { Layout } {{{
-  [ ("M1-<F1>"    , sendMessage $ JumpToLayout "vtile")
-  , ("M1-<F2>"    , sendMessage $ JumpToLayout "tabbed")
-  , ("M1-<F3>"    , sendMessage $ JumpToLayout "dualTab")
-  , ("M1-<F4>"    , sendMessage $ JumpToLayout "htile")
-  , ("M1-<F5>"    , sendMessage $ JumpToLayout "full")
+  [ ("M1-<F1>"    , sendMessage $ JumpToLayout "tabbed")
+  , ("M1-<F2>"    , sendMessage $ JumpToLayout "vtile")
+  , ("M1-<F3>"    , sendMessage $ JumpToLayout "htile")
+  , ("M1-<F4>"    , sendMessage $ JumpToLayout "full")
+  -- , ("M1-<F5>"    , sendMessage $ JumpToLayout "dualTab")
   ] ++
   -- }}}
 
@@ -310,29 +310,28 @@ myTabConfig = def
   , inactiveTextColor   = "#d0d0d0"
   }
 
-commonLayoutSetting =
-  windowNavigation
-  . avoidStruts
-  . mouseResize
+commonLayoutSetting = windowNavigation
   . windowArrange
+  . mouseResize
   . trackFloating
+  . mySpacing
+  . avoidStruts
 
 -- apply commonLayoutSetting beforehand to resolve the conflict between tall & tabbed layouts
-myLayoutHook = commonLayoutSetting
-    myVTiledLayout
-    ||| myHTiledLayout
-    ||| myTabbedLayout
-    ||| myDualTabLayout
-    ||| myFullLayout
+myLayoutHook = commonLayoutSetting $ myVTiledLayout
+                                 ||| myHTiledLayout
+                                 ||| myTabbedLayout
+                                 ||| myFullLayout
+    -- ||| myDualTabLayout
 
     -- We need to place spacing after renamed switch the layouts normally
     where
         myVTiledLayout =
           renamed [Replace "vtile"]
           $ mkToggle (NOBORDERS ?? FULL ?? EOT)
-          $ addTabs shrinkText myTabConfig
-          $ subLayout [] (smartBorders Simplest)
-          $ mySpacing
+          -- $ addTabs shrinkText myTabConfig
+          -- $ subLayout [] (smartBorders Simplest)
+          -- $ Tall 1 (3/100) (1/2)
           $ ResizableTall
             1        -- number of master panes
             (3/100)  -- % of screen to increment by when resizing
@@ -351,10 +350,10 @@ myLayoutHook = commonLayoutSetting
 
         myFullLayout = renamed [Replace "full"] Full
 
-        myDualTabLayout =
-          renamed [Replace "dualTab"]
-          $ mySpacing
-          $ combineTwo (TwoPane 0.03 0.5) myTabbedLayout myTabbedLayout
+        -- myDualTabLayout =
+        --   renamed [Replace "dualTab"]
+        --   $ mySpacing
+        --   $ combineTwo (TwoPane 0.03 0.5) myTabbedLayout myTabbedLayout
 -- }}}
 
 -- { Manage Hook } {{{
@@ -389,7 +388,7 @@ myEventHook = refocusLastWhen myPred
 myFadeHook = composeAll
     [ opaque -- default to opaque
     , isUnfocused --> opacity 0.9
-    , (className =? "Alacritty") <&&> isUnfocused --> opacity 0.85
+    , (className =? "Alacritty") <&&> isUnfocused --> opacity 0.87
     -- , fmap ("Google" `isPrefixOf`) className --> opaque
     , isDialog --> opaque
     --, isUnfocused --> opacity 0.55
